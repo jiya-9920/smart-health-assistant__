@@ -1,0 +1,231 @@
+/* ---------------- src/PredictionForm.css ---------------- */
+
+/* Wrapper for center alignment */
+.prediction-form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  background: #f0f4f8;
+  min-height: 100vh;
+}
+
+/* Main form container */
+.prediction-form-container {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 50px 45px;
+  width: 850px; /* ⬅️ wider form */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Headings */
+.prediction-form-container h2 {
+  font-size: 50px; /* ⬅️ bigger heading */
+  margin-bottom: 15px;
+  text-align: center;
+  color: #333;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.prediction-form-container p {
+  text-align: center;
+  color: #555;
+  margin-bottom: 25px;
+  font-size: 17px;
+}
+
+/* ---------------- Buttons: Logout & Predict ---------------- */
+.logout-button,
+.prediction-form-container button[type="submit"] {
+  background-color: #3399ff;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 30px; /* ⬅️ slightly taller button */
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.3s;
+  text-align: center;
+  display: block;
+  margin: 0 auto 30px auto; /* ⬅️ space below logout button */
+  min-width: 180px; /* ⬅️ wider button */
+}
+
+.logout-button:hover,
+.prediction-form-container button[type="submit"]:hover {
+  background-color: #007acc;
+}
+
+.prediction-form-container button[disabled] {
+  background-color: #b3d1ff;
+  cursor: not-allowed;
+}
+
+/* Form elements */
+.prediction-form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.prediction-form-container input,
+.prediction-form-container select {
+  padding: 14px 16px; /* ⬅️ taller dropdown/input */
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 18px; /* ⬅️ bigger font for inputs */
+  width: 100%;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.prediction-form-container input:focus,
+.prediction-form-container select:focus {
+  border-color: #3399ff;
+  box-shadow: 0 0 5px rgba(51, 153, 255, 0.3);
+  outline: none;
+}
+
+/* Prediction & Advice results */
+.result {
+  font-size: 22px;
+  text-align: center;
+  margin-top: 20px;
+  padding: 12px 15px;
+  border-radius: 12px;
+}
+
+/* Risky predictions */
+.result.risky {
+  color: #ff4d4d;
+  background-color: #fff1f0;
+  font-weight: bold;
+}
+
+/* Healthy predictions/advice */
+.result.healthy {
+  color: #28a745;
+  background-color: #e6f9f0;
+  font-weight: bold;
+}
+
+/* Previous records section */
+.records-section {
+  margin-top: 30px;
+}
+
+.records-section h3 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #333;
+  text-align: center;
+}
+
+/* Record cards */
+.record {
+  padding: 18px 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+  font-size: 16px;
+}
+
+/* Risky records */
+.record.risky {
+  border-left: 5px solid #ff4d4d;
+  background-color: #fff1f0;
+  color: #ff4d4d;
+}
+
+/* Healthy records */
+.record.healthy {
+  border-left: 5px solid #28a745;
+  background-color: #e6f9f0;
+  color: #28a745;
+}
+
+/* Individual record text */
+.record p {
+  margin: 5px 0;
+}
+
+/* Login message when user is not logged in */
+.login-message {
+  text-align: center;
+  font-size: 16px;
+  color: #555;
+}
+
+.login-message a {
+  color: #3399ff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-message a:hover {
+  text-decoration: underline;
+}
+
+/* Dropdown styling */
+.form-select {
+  padding: 14px 16px; /* ⬅️ taller dropdown */
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 18px; /* ⬅️ bigger text */
+  width: 100%;
+  margin-bottom: 15px;
+  transition: border 0.2s;
+}
+
+.form-select:focus {
+  border-color: #3399ff;
+  outline: none;
+}
+
+/* ---------------- Mobile Responsiveness ---------------- */
+@media (max-width: 900px) {
+  .prediction-form-container {
+    width: 90%;
+    padding: 40px 25px;
+  }
+
+  .prediction-form-container h2 {
+    font-size: 28px;
+  }
+
+  .prediction-form-container input,
+  .prediction-form-container select {
+    font-size: 16px;
+    padding: 12px 14px;
+  }
+
+  .prediction-form-container button[type="submit"],
+  .logout-button {
+    padding: 12px 25px;
+    font-size: 16px;
+    min-width: 150px;
+  }
+}
+/* Chart button styling */
+.prediction-form-button {
+  background-color: #ff6600;
+  color: #fff;
+  padding: 12px 25px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  display: block;
+  margin: 20px auto;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.prediction-form-button:hover {
+  background-color: #e65c00;
+}
+
+/* ...rest of your existing CSS remains the same... */

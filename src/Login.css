@@ -1,0 +1,126 @@
+/* 🌈 Animated Gradient Background */
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(270deg, #9be7ff, #a1c4fd, #c2e9fb, #dfe9f3);
+  background-size: 800% 800%;
+  animation: gradientAnimation 15s ease infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* To prevent shapes from overflowing */
+}
+
+@keyframes gradientAnimation {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+
+/* Floating Shapes */
+.floating-shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(155,231,255,0.3);
+  animation: floatAnimation 10s linear infinite;
+}
+
+.floating-shape:nth-child(1) { width: 80px; height: 80px; top: 10%; left: 20%; animation-duration: 12s; }
+.floating-shape:nth-child(2) { width: 50px; height: 50px; top: 70%; left: 10%; animation-duration: 8s; }
+.floating-shape:nth-child(3) { width: 100px; height: 100px; top: 40%; left: 80%; animation-duration: 15s; }
+.floating-shape:nth-child(4) { width: 60px; height: 60px; top: 80%; left: 60%; animation-duration: 10s; }
+
+@keyframes floatAnimation {
+  0% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(-20px) translateX(10px); }
+  100% { transform: translateY(0px) translateX(0px); }
+}
+
+/* Login Form Container */
+.login-container {
+  position: relative; /* On top of floating shapes */
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(-20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+/* Form Heading */
+.login-container h2 {
+  margin-bottom: 30px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Input Fields */
+.login-container input[type="email"],
+.login-container input[type="password"] {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.login-container input:focus {
+  border-color: #9be7ff;
+  box-shadow: 0 0 8px rgba(155,231,255,0.5);
+}
+
+/* Submit Button */
+.login-container button {
+  width: 100%;
+  padding: 12px 15px;
+  margin-top: 15px;
+  background: linear-gradient(90deg, #6dd5fa, #2980b9);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-container button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(41,128,185,0.4);
+}
+
+/* Links */
+.login-container .links {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.login-container .links a {
+  color: #2980b9;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.login-container .links a:hover {
+  text-decoration: underline;
+}
+/* Wrapper to center everything */
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* full screen */
+  position: relative;
+  overflow: hidden;
+}

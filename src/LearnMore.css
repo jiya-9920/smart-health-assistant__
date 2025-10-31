@@ -1,0 +1,182 @@
+/* 🌍 Universal Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.learnmore-container {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #eef4fa, #dce8f5);
+  color: #1e2a38;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+/* 🌟 Hero Section */
+.learnmore-hero {
+  max-width: 900px;
+  margin-bottom: 60px;
+  animation: fadeIn 1.2s ease;
+}
+
+.learnmore-hero h1 {
+  font-size: 2.5rem;
+  color: #0d47a1;
+  margin-bottom: 20px;
+}
+
+.learnmore-hero p {
+  font-size: 1.1rem;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.cta-button {
+  background: #0d47a1;
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cta-button:hover {
+  background: #1565c0;
+}
+
+/* 💡 Sections */
+.learnmore-section {
+  width: 100%;
+  max-width: 1100px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 60px 40px;
+  margin-bottom: 60px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  animation: fadeUp 1s ease;
+}
+
+.learnmore-section.alt-bg {
+  background: linear-gradient(135deg, #e3f2fd, #f1f8ff);
+}
+
+.learnmore-section h2 {
+  color: #0d47a1;
+  margin-bottom: 40px;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+/* 🧩 Cards */
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 25px;
+  width: 300px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card h3 {
+  color: #1565c0;
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+}
+
+.card p {
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ⚙️ How It Works / Benefits */
+.learnmore-section ol,
+.learnmore-section ul {
+  text-align: left;
+  margin: 0 auto;
+  max-width: 700px;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.learnmore-section li {
+  margin-bottom: 10px;
+}
+
+/* 🔙 Back Button */
+.back-btn-container {
+  margin-bottom: 40px;
+}
+
+.back-button {
+  background: #0d47a1;
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.back-button:hover {
+  background: #1565c0;
+}
+
+/* ✨ Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 768px) {
+  .learnmore-hero h1 {
+    font-size: 2rem;
+  }
+
+  .learnmore-section {
+    padding: 40px 20px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 340px;
+  }
+}

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Risk Chart</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCFVg0eMwnxOTQzjugM0R6_RJeiIZspj7o",
+  authDomain: "smarthealthassistant-d8643.firebaseapp.com",
+  projectId: "smarthealthassistant-d8643",
+  storageBucket: "smarthealthassistant-d8643.appspot.com",
+  messagingSenderId: "315234803893",
+  appId: "1:315234803893:web:4e9c34a1e215a782269efc"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// Fetch all risk data
+async function fetchRiskData(uid) {
+  const q = query(collection(db, "users", uid, "records"), orderBy("timestamp", "asc"));
+  const snapshot = await getDocs(q);
+
+  const labels = [];
+  const scores = [];
+  const colors = [];
+
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    const risk = data.risk !== undefined ? data.risk : 0;
+    const time = data.timestamp ? (data.timestamp.toDate ? data.timestamp.toDate() : new Date(data.timestamp)) : new Date();
+    
+    labels.push(time.toLocaleDateString("en-IN", { day: "numeric", month: "short" }));
+    scores.push(risk);
+    colors.push(risk >= 60 ? "red" : "green");
+  });
+
+  return { labels, scores, colors };
+}
+
+// Render chart
+function renderChart(labels, scores, colors) {
+  const ctx = document.getElementById("riskChart").getContext("2d");
+  new Chart(ctx, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: "Risk Score (%)",
+        data: scores,
+        borderColor: "#00d4ff",
+        backgroundColor: "rgba(0,212,255,0.15)",
+        tension: 0.4,
+        fill: true,
+        pointRadius: 7,
+        pointBackgroundColor: colors,
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: "#fff", font: { size: 16, weight: "bold" } } },
+        title: {
+          display: true,
+          text: "Health Risk Progress Over Time",
+          color: "#00d4ff",
+          font: { size: 22, weight: "bold" },
+          padding: { top: 20, bottom: 20 }
+        },
+        subtitle: {
+          display: true,
+          text: "Red points indicate high risk (≥60%), green points indicate low risk",
+          color: "#aaa",
+          font: { size: 14 },
+          padding: { bottom: 10 }
+        },
+        tooltip: {
+          titleFont: { size: 16 },
+          bodyFont: { size: 14 },
+        },
+      },
+      scales: {
+        x: { ticks: { color: "#ddd" }, grid: { color: "rgba(255,255,255,0.1)" } },
+        y: { beginAtZero: true, max: 100, ticks: { color: "#ddd" }, grid: { color: "rgba(255,255,255,0.1)" } }
+      }
+    }
+  });
+}
+
+// Auth listener
+onAuthStateChanged(auth, async (user) => {
+  const statusEl = document.getElementById("status");
+  if (user) {
+    const { labels, scores, colors } = await fetchRiskData(user.uid);
+    if (scores.length === 0) {
+      statusEl.innerText = "⚠️ No risk data yet. Make a prediction first!";
+    } else {
+      renderChart(labels, scores, colors);
+      statusEl.innerText = "";
+    }
+  } else {
+    statusEl.innerText = "⚠️ Please log in to see your risk chart.";
+  }
+});
+</script>
+
+<style>
+body {
+  font-family: Poppins, sans-serif;
+  background: linear-gradient(135deg, #0a0a1f, #14143a);
+  color: #fff;
+  text-align: center;
+  padding: 40px 20px;
+  margin: 0;
+}
+
+h1 {
+  color: #00d4ff;
+  margin-bottom: 5px;
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.7);
+}
+
+h2 {
+  color: #fff;
+  margin-bottom: 20px;
+  font-weight: 400;
+}
+
+.chart-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  background: #0f3460;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(0, 212, 255, 0.25);
+  overflow-x: auto;
+}
+
+/* ✨ Responsive Chart */
+canvas {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 450px;
+}
+
+/* 📱 Mobile optimization */
+@media (max-width: 768px) {
+  body {
+    padding: 20px 10px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  .chart-container {
+    padding: 15px;
+  }
+
+  canvas {
+    max-height: 300px !important;
+  }
+
+  .back-btn {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+}
+
+#status {
+  margin-top: 15px;
+  color: #aaa;
+  font-size: 1rem;
+}
+
+.back-btn {
+  margin-top: 30px;
+  background: #00d4ff;
+  color: #000;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+}
+
+footer {
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+</style>
+</head>
+<body>
+
+<h1>📊 Health Risk Trend Chart</h1>
+<h2>Track your personalized health risk over time</h2>
+
+<div class="chart-container">
+  <canvas id="riskChart"></canvas>
+  <div id="status">Loading...</div>
+</div>
+
+<button class="back-btn" onclick="window.close()">← Close Chart</button>
+
+<footer>Smart Health Assistant © 2025</footer>
+
+</body>
+</html>
+
+
