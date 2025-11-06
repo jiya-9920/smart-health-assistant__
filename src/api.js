@@ -13,13 +13,14 @@ export const getPrediction = async (modelType, formData) => {
       ...formData,
     };
 
-    const response = await axios.post("https://smart-health-backend-4.onrender.com", payload);
+    const response = await axios.post("https://smart-health-backend-4.onrender.com/predict", payload);
     return response.data;
   } catch (error) {
     console.error("Error calling backend:", error);
     return { prediction: "⚠️ Unable to connect to server." };
   }
 };
+
 
 
 
