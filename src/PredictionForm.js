@@ -206,3 +206,4 @@ function PredictionForm({ user }) {
 
 export default PredictionForm;
 
+
