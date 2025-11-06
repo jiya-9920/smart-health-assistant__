@@ -22,3 +22,4 @@ export const getPrediction = async (modelType, formData) => {
 };
 
 
+
