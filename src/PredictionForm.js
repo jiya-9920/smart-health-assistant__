@@ -21,6 +21,7 @@ function PredictionForm({ user }) {
   const [advice, setAdvice] = useState("");
   const [loading, setLoading] = useState(false);
   const [records, setRecords] = useState([]);
+  const [riskScore, setRiskScore] = useState(0);
   const [predictionIsRisky, setPredictionIsRisky] = useState(false);
 
   // Logout
@@ -59,50 +60,40 @@ function PredictionForm({ user }) {
     setLoading(true);
     setPrediction("");
     setAdvice("");
+    setRiskScore(0);
     setPredictionIsRisky(false);
 
     try {
       let payload = { model_type: modelType, age, bp };
-
       if (modelType === "diabetes") payload = { ...payload, glucose, bmi };
       else if (modelType === "heart") payload = { ...payload, cholesterol, max_heart_rate: maxHeartRate, sex, cp };
       else if (modelType === "hypertension") payload = { ...payload, cholesterol, max_heart_rate: maxHeartRate };
 
-      // 🌐 Updated API URL (hosted backend)
       const response = await axios.post("https://smart-health-backend-3.onrender.com/predict", payload);
-      const result = response.data.prediction || "No prediction received";
+      const { prediction: predText, risk_score } = response.data;
 
-      const isRisky = checkIfRisky(result);
+      const isRisky = checkIfRisky(predText);
       setPredictionIsRisky(isRisky);
-      setPrediction(result);
+      setPrediction(predText);
+      setRiskScore(risk_score);
 
       // Advice
       let doctorAdvice = "";
-      if (result.toLowerCase().includes("diabetes") && isRisky) doctorAdvice = "Monitor glucose and consult a doctor.";
-      else if (result.toLowerCase().includes("heart") && isRisky) doctorAdvice = "Maintain a heart-healthy diet and exercise.";
-      else if (result.toLowerCase().includes("hypertension") && isRisky) doctorAdvice = "Monitor BP and consult your doctor.";
+      if (predText.toLowerCase().includes("diabetes") && isRisky) doctorAdvice = "Monitor glucose and consult a doctor.";
+      else if (predText.toLowerCase().includes("heart") && isRisky) doctorAdvice = "Maintain a heart-healthy diet and exercise.";
+      else if (predText.toLowerCase().includes("hypertension") && isRisky) doctorAdvice = "Monitor BP and consult your doctor.";
       else doctorAdvice = "Keep a healthy lifestyle.";
       setAdvice(doctorAdvice);
-
-      // ✅ Realistic risk calculation
-      let riskScore = 0;
-      if (modelType === "diabetes") {
-        riskScore = Math.round(Math.min(100, Number(age) * 0.3 + Number(glucose) * 0.5 + Number(bmi) * 0.2));
-      } else if (modelType === "heart") {
-        riskScore = Math.round(Math.min(100, Number(age) * 0.25 + Number(cholesterol) * 0.4 + Number(maxHeartRate) * 0.25 + (sex === "1" ? 5 : 0)));
-      } else if (modelType === "hypertension") {
-        riskScore = Math.round(Math.min(100, Number(age) * 0.3 + Number(bp) * 0.5 + Number(cholesterol) * 0.2));
-      }
-      if (!isRisky) riskScore = Math.max(0, riskScore - 20);
 
       // Save record
       if (user) {
         const newRecord = {
           ...payload,
-          prediction: result,
+          prediction: predText,
           advice: doctorAdvice,
-          risk: riskScore,
-          timestamp: new Date(), // always save timestamp
+          risk: risk_score,
+          model_type: modelType,
+          timestamp: new Date(),
         };
         await addDoc(collection(db, "users", user.uid, "records"), newRecord);
         setRecords((prev) => [newRecord, ...prev]);
@@ -172,10 +163,14 @@ function PredictionForm({ user }) {
           <button type="submit" disabled={loading}>{loading ? "Analyzing..." : "Predict"}</button>
         </form>
 
-        {prediction && <h3 className={`result ${predictionIsRisky ? "risky" : "healthy"}`}>{prediction}</h3>}
+        {prediction && (
+          <h3 className={`result ${predictionIsRisky ? "risky" : "healthy"}`}>
+            {prediction} <br />
+            Risk Score: {riskScore} ({predictionIsRisky ? "High" : "Low/Moderate"})
+          </h3>
+        )}
         {advice && <h3 className={`result ${predictionIsRisky ? "risky" : "healthy"}`}>{advice}</h3>}
 
-        {/* Open HTML Risk Chart */}
         {records.length > 0 && (
           <button
             className="prediction-form-button"
@@ -185,7 +180,6 @@ function PredictionForm({ user }) {
           </button>
         )}
 
-        {/* Previous Records */}
         {records.length > 0 && (
           <div className="records-section">
             <h3>Previous Records</h3>
