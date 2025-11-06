@@ -69,7 +69,7 @@ function PredictionForm({ user }) {
       else if (modelType === "heart") payload = { ...payload, cholesterol, max_heart_rate: maxHeartRate, sex, cp };
       else if (modelType === "hypertension") payload = { ...payload, cholesterol, max_heart_rate: maxHeartRate };
 
-      const response = await axios.post("https://smart-health-backend-3.onrender.com/predict", payload);
+      const response = await axios.post("https://smart-health-backend-4.onrender.com", payload);
       const { prediction: predText, risk_score } = response.data;
 
       const isRisky = checkIfRisky(predText);
@@ -205,3 +205,4 @@ function PredictionForm({ user }) {
 }
 
 export default PredictionForm;
+
